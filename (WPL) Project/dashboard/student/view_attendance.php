@@ -1,0 +1,35 @@
+<?php
+include("../../includes/db.php");
+include("../../includes/auth_session.php");
+
+$username = $_SESSION['username'];
+$get_id = $conn->query("SELECT id FROM users WHERE username='$username'");
+$student = $get_id->fetch_assoc();
+$student_id = $student['id'];
+
+$records = $conn->query("SELECT * FROM attendance WHERE student_id='$student_id'");
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Attendance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h4>Attendance Report</h4>
+    <table class="table table-bordered">
+        <thead><tr><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+            <?php while($row = $records->fetch_assoc()): ?>
+                <tr>
+                    <td><?= $row['date']; ?></td>
+                    <td><?= $row['status']; ?></td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+    <a href="dashboard.php" class="btn btn-secondary">Back</a>
+</div>
+</body>
+</html>
